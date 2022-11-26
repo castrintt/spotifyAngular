@@ -6,7 +6,7 @@ import { AppRoutes } from './app.routes';
 import { LoginModule } from './pages/login/login.module';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent ],
   imports: [BrowserModule, RouterModule.forRoot(AppRoutes)],
   providers: [],
   bootstrap: [AppComponent],
