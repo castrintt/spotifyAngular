@@ -2,6 +2,13 @@
   <div class="image-container flex flex-center">
     <img src="../../../../assets/images/spotify-logo.png" alt="logo">
   </div>
+  <div class="menu-container flex options">
+    <ng-template ngFor let-item [ngForOf]="searchProperties">
+      <app-button [searchProperties]="item" (click)="buttonClick($event)">
+        <fa-icon [icon]="item.icon"></fa-icon>
+      </app-button>
+    </ng-template>
+  </div>
 </div>
 <div class="user-info">
 

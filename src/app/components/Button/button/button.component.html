@@ -1,0 +1,7 @@
+<button type="button" [ngClass]="{'selected':searchProperties.selected}"
+  (click)="onClick(searchProperties.description)">
+  <ng-content></ng-content>
+  <span>
+    {{searchProperties.description}}
+  </span>
+</button>
