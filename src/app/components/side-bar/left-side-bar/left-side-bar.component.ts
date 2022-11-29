@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  faGuitar,
-  faHome,
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
+import { faGuitar, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { EButtons } from 'src/app/Enums/EButtons';
 import IButton from 'src/app/interfaces/IButton';
 
 @Component({
@@ -12,30 +9,31 @@ import IButton from 'src/app/interfaces/IButton';
   styleUrls: ['./left-side-bar.component.scss'],
 })
 export class LeftSideBarComponent implements OnInit {
-  public selectedMenu: string = 'Home';
+  public selectedMenu: string = EButtons.Home;
 
   public searchProperties: Array<IButton> = [
     {
-      description: 'Home',
+      description: EButtons.Home,
       icon: faHome,
-      selected: this.selectedItem('Home'),
+      selected: this.selectedItem(EButtons.Home),
     },
     {
-      description: 'Pesquisar',
+      description: EButtons.Pesquisar,
       icon: faSearch,
-      selected: this.selectedItem('Pesquisar'),
+      selected: this.selectedItem(EButtons.Pesquisar),
     },
     {
-      description: 'Artistas',
+      description: EButtons.Artistas,
       icon: faGuitar,
-      selected: this.selectedItem('Artistas'),
+      selected: this.selectedItem(EButtons.Artistas),
     },
   ];
 
   ngOnInit(): void {}
 
-  public buttonClick(description: string): void {
+  public buttonClick(description: string): boolean {
     this.selectedMenu = description;
+    return this.selectedMenu === description;
   }
 
   public selectedItem(description: string): boolean {

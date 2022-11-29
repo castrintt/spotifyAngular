@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { EButtons } from 'src/app/Enums/EButtons';
 import IButton from 'src/app/interfaces/IButton';
 
 @Component({
@@ -9,7 +10,7 @@ import IButton from 'src/app/interfaces/IButton';
 export class ButtonComponent implements OnInit {
   @Input()
   public searchProperties: IButton = {
-    description: '',
+    description: 'Home',
     icon: null,
     selected: false,
   };
@@ -17,9 +18,7 @@ export class ButtonComponent implements OnInit {
   @Output()
   public click = new EventEmitter<string>();
 
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+  ngOnInit(): void {}
 
   public onClick(description: string): void {
     this.click.emit(description);
