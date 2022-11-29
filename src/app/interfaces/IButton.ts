@@ -1,5 +1,5 @@
 export default interface IButton {
-  description: string ;
+  description: string;
   icon: any;
   selected: boolean;
 }

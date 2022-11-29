@@ -10,7 +10,7 @@ import IButton from 'src/app/interfaces/IButton';
 export class ButtonComponent implements OnInit {
   @Input()
   public searchProperties: IButton = {
-    description: 'Home',
+    description: '',
     icon: null,
     selected: false,
   };
