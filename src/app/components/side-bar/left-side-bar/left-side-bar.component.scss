@@ -26,11 +26,28 @@ $between-menu: 10px;
       }
     }
     .menu-container {
+      &.flex {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+      }
       width: 100%;
       &.options {
-        flex-direction: column;
         min-height: $menu-options-height;
 
+        * {
+          margin-bottom: $between-menu;
+        }
+      }
+      .playlist-title {
+        margin: 10px 0px;
+        align-self: flex-start;
+        font-weight: bold;
+        font-size: 0.7em;
+        color: $black-transparent-30;
+      }
+      .playlist-scroll {
+        width: 100%;
         * {
           margin-bottom: $between-menu;
         }

@@ -1,5 +1,10 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
-import { faGuitar, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import {
+  faGuitar,
+  faHome,
+  faMusic,
+  faSearch,
+} from '@fortawesome/free-solid-svg-icons';
 import { EButtons } from 'src/app/Enums/EButtons';
 import IButton from 'src/app/interfaces/IButton';
 
@@ -29,9 +34,42 @@ export class LeftSideBarComponent implements OnInit {
     },
   ];
 
+  public playlistProperties: Array<IButton> = [
+    {
+      description: 'Play 1',
+      icon: faMusic,
+      selected: false,
+    },
+    {
+      description: 'Play 2',
+      icon: faMusic,
+      selected: false,
+    },
+    {
+      description: 'Play 3',
+      icon: faMusic,
+      selected: false,
+    },
+    {
+      description: 'Play 4',
+      icon: faMusic,
+      selected: false,
+    },
+    {
+      description: 'Play 5',
+      icon: faMusic,
+      selected: false,
+    },
+  ];
+
   ngOnInit(): void {}
 
-  public resetSelectedButton(): void {
+  public buttonClick(description: string): void {
+    this.selectedMenu = description;
+    this.resetListSelectedValues();
+    this.selectedOptionsHandler(this.selectedMenu);
+  }
+  private resetRouteMenuSelectedOption(): void {
     this.searchProperties = [
       {
         description: EButtons.Home,
@@ -50,12 +88,31 @@ export class LeftSideBarComponent implements OnInit {
       },
     ];
   }
-  public buttonClick(description: string): void {
-    this.selectedMenu = description;
-    this.resetSelectedButton();
-    this.changeTheSelectedIcon(this.selectedMenu);
+  private resetPlaylistSelectedOption(): void {
+    const newArray: Array<IButton> = this.playlistProperties.map(
+      (values: IButton, index: number) => {
+        if (values.selected === this.playlistProperties[index].selected) {
+          return {
+            ...values,
+            selected: false,
+          };
+        }
+        return values;
+      }
+    );
+    this.playlistProperties = newArray;
   }
-  public changeTheSelectedIcon(selectedMenuItem: string): void {
+  private resetListSelectedValues(): void {
+    this.resetRouteMenuSelectedOption();
+    this.resetPlaylistSelectedOption();
+  }
+
+  private selectedOptionsHandler(description: string): void {
+    this.changeTheRoutesMenuSelectedOptions(description);
+    this.changeThePlaylistMenuSelectedOptions(description);
+  }
+  
+  private changeTheRoutesMenuSelectedOptions(selectedMenuItem: string): void {
     const newSearchPropertiesArray: Array<IButton> = this.searchProperties.map(
       (values: IButton) => {
         if (values.description === selectedMenuItem) {
@@ -68,5 +125,19 @@ export class LeftSideBarComponent implements OnInit {
       }
     );
     this.searchProperties = newSearchPropertiesArray;
+  }
+  private changeThePlaylistMenuSelectedOptions(selectedPlaylist: string): void {
+    const newPlaylistArray: Array<IButton> = this.playlistProperties.map(
+      (values: IButton) => {
+        if (values.description === selectedPlaylist) {
+          return {
+            ...values,
+            selected: true,
+          };
+        }
+        return values;
+      }
+    );
+    this.playlistProperties = newPlaylistArray;
   }
 }
