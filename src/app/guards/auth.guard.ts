@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, Router, UrlSegment, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SpotifyServiceService } from '../services/spotify-service.service';
+import { SpotifyService } from '../services/spotify.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ import { SpotifyServiceService } from '../services/spotify-service.service';
 export class AuthGuard implements CanLoad {
   constructor(
     private router: Router,
-    private spotifyService: SpotifyServiceService
+    private spotifyService: SpotifyService
   ) {}
 
   canLoad(

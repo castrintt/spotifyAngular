@@ -2,12 +2,17 @@ import { Injectable } from '@angular/core';
 import { SpotifyConfiguration } from 'src/environments/environment';
 import Spotify from 'spotify-web-api-js';
 import IUser from '../interfaces/IUser';
-import { SpotifyTranslateUser } from '../common/spotifyHelper';
+import {
+  SpotifyPlaylistTranslate,
+  SpotifyTranslateUser,
+} from '../common/spotifyHelper';
+import { async } from 'rxjs';
+import IPlaylist from '../interfaces/IPlaylist';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SpotifyServiceService {
+export class SpotifyService {
   public spotify: Spotify.SpotifyWebApiJs;
   public user: IUser;
   constructor() {
@@ -24,16 +29,18 @@ export class SpotifyServiceService {
   private tryToInitializeUser = async (token: string) => {
     try {
       this.defineAccessToken(token);
-      await this.obtainSpotifyUser();
+      this.obtainSpotifyUser();
       return !!this.user;
     } catch (ex) {
       return false;
     }
   };
+
   public obtainSpotifyUser = async () => {
-    const userInfo = this.spotify.getMe();
+    const userInfo = await this.spotify.getMe();
     this.user = SpotifyTranslateUser(userInfo);
   };
+
   public obtainLoginUrl(): string {
     const authEndPoint: string = `${SpotifyConfiguration.authEndpoint}?`;
     const clientId: string = `client_id=${SpotifyConfiguration.clientId}&`;
@@ -53,6 +60,15 @@ export class SpotifyServiceService {
     this.spotify.setAccessToken(token);
     localStorage.setItem('Token', token);
   }
-  
 
+  public searchUserPlaylist = async (
+    offset = 0,
+    limit = 50
+  ): Promise<Array<IPlaylist>> => {
+    const userPlaylists = await this.spotify.getUserPlaylists(this.user.id, {
+      limit,
+      offset,
+    });
+    return userPlaylists.items.map(SpotifyPlaylistTranslate);
+  };
 }

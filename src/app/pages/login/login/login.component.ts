@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SpotifyServiceService } from 'src/app/services/spotify-service.service';
+import { SpotifyService } from 'src/app/services/spotify.service';
 
 @Component({
   selector: 'app-login',
@@ -9,20 +9,20 @@ import { SpotifyServiceService } from 'src/app/services/spotify-service.service'
 })
 export class LoginComponent implements OnInit {
   constructor(
-    private spotifyServiceService: SpotifyServiceService,
+    private spotifyService: SpotifyService,
     private router: Router
   ) {}
 
   public openLoginPage = () => {
-    window.location.href = this.spotifyServiceService.obtainLoginUrl();
+    window.location.href = this.spotifyService.obtainLoginUrl();
   };
 
   public verifyTokenInTheURl = () => {
-    const token: string = this.spotifyServiceService.obtainTokenUrlCallBack();
+    const token: string = this.spotifyService.obtainTokenUrlCallBack();
     if (!!token) {
-      this.spotifyServiceService.defineAccessToken(token);
+      this.spotifyService.defineAccessToken(token);
       this.router.navigate(['/player']);
-    } 
+    }
   };
 
   ngOnInit(): void {
