@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { EButtons } from 'src/app/Enums/EButtons';
 import IButton from 'src/app/interfaces/IButton';
 
 @Component({

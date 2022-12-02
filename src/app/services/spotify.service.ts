@@ -15,6 +15,7 @@ import IPlaylist from '../interfaces/IPlaylist';
 export class SpotifyService {
   public spotify: Spotify.SpotifyWebApiJs;
   public user: IUser;
+  public userIdToFindPlaylist: string;
   constructor() {
     this.spotify = new Spotify();
   }
@@ -24,9 +25,6 @@ export class SpotifyService {
     if (!token) {
       return false;
     }
-    return this.tryToInitializeUser(token);
-  };
-  private tryToInitializeUser = async (token: string) => {
     try {
       this.defineAccessToken(token);
       this.obtainSpotifyUser();
@@ -39,6 +37,7 @@ export class SpotifyService {
   public obtainSpotifyUser = async () => {
     const userInfo = await this.spotify.getMe();
     this.user = SpotifyTranslateUser(userInfo);
+    this.userIdToFindPlaylist = userInfo.id;
   };
 
   public obtainLoginUrl(): string {
@@ -61,14 +60,14 @@ export class SpotifyService {
     localStorage.setItem('Token', token);
   }
 
-  public searchUserPlaylist = async (
-    offset = 0,
-    limit = 50
-  ): Promise<Array<IPlaylist>> => {
-    const userPlaylists = await this.spotify.getUserPlaylists(this.user.id, {
-      limit,
-      offset,
-    });
+  public searchUserPlaylist = async (offset = 0, limit = 50): Promise<any> => {
+    const userPlaylists = await this.spotify.getUserPlaylists(
+      this.userIdToFindPlaylist,
+      {
+        limit,
+        offset,
+      }
+    );
     return userPlaylists.items.map(SpotifyPlaylistTranslate);
   };
 }

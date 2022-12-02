@@ -9,12 +9,12 @@ export const SpotifyTranslateUser = (user: any): IUser => {
   };
 };
 
-export const SpotifyPlaylistTranslate = (
+export function SpotifyPlaylistTranslate(
   playlist: SpotifyApi.PlaylistObjectSimplified
-): IPlaylist => {
+): IPlaylist {
   return {
     id: playlist.id,
     name: playlist.name,
     imageUrl: playlist.images.pop().url,
   };
-};
+}

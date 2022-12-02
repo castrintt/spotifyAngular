@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   faGuitar,
   faHome,
@@ -136,8 +136,8 @@ export class LeftSideBarComponent implements OnInit {
     this.playlistProperties = newPlaylistArray;
   }
 
-  private getPlaylists = async () => {
+  async getPlaylists() {
     this.userPlaylists = await this.spotifyService.searchUserPlaylist();
     console.log(this.userPlaylists);
-  };
+  }
 }
