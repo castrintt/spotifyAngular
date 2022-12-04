@@ -17,7 +17,6 @@ import { SpotifyService } from 'src/app/services/spotify.service';
 })
 export class LeftSideBarComponent implements OnInit {
   public selectedMenu: string = EButtons.Home;
-
   public searchProperties: Array<IButton> = [
     {
       description: EButtons.Home,
@@ -35,78 +34,20 @@ export class LeftSideBarComponent implements OnInit {
       selected: false,
     },
   ];
-  public playlistProperties: Array<IButton> = [
-    {
-      description: 'Play 1',
-      icon: faMusic,
-      selected: false,
-    },
-    {
-      description: 'Play 2',
-      icon: faMusic,
-      selected: false,
-    },
-    {
-      description: 'Play 3',
-      icon: faMusic,
-      selected: false,
-    },
-    {
-      description: 'Play 4',
-      icon: faMusic,
-      selected: false,
-    },
-    {
-      description: 'Play 5',
-      icon: faMusic,
-      selected: false,
-    },
-  ];
-  public userPlaylists: Array<IPlaylist> = [];
+  public musicICon: any = faMusic;
+  public userPlaylists: Array<IButton> = [];
 
   constructor(private spotifyService: SpotifyService) {}
 
   ngOnInit(): void {
     this.getPlaylists();
+    console.log(this.userPlaylists);
   }
 
-  public buttonClick(description: string): void {
+  public selectMenu(description: string): void {
     this.selectedMenu = description;
-    this.resetListSelectedValues();
-    this.selectedOptionsHandler(this.selectedMenu);
+    this.changeTheRoutesMenuSelectedOptions(this.selectedMenu);
   }
-  private resetRouteMenuSelectedOption(): void {
-    const newArray: Array<IButton> = this.searchProperties.map(
-      (values: IButton) => {
-        return {
-          ...values,
-          selected: false,
-        };
-      }
-    );
-    this.searchProperties = newArray;
-  }
-  private resetPlaylistSelectedOption(): void {
-    const newArray: Array<IButton> = this.playlistProperties.map(
-      (values: IButton) => {
-        return {
-          ...values,
-          selected: false,
-        };
-      }
-    );
-    this.playlistProperties = newArray;
-  }
-  private resetListSelectedValues(): void {
-    this.resetRouteMenuSelectedOption();
-    this.resetPlaylistSelectedOption();
-  }
-
-  private selectedOptionsHandler(description: string): void {
-    this.changeTheRoutesMenuSelectedOptions(description);
-    this.changeThePlaylistMenuSelectedOptions(description);
-  }
-
   private changeTheRoutesMenuSelectedOptions(selectedMenuItem: string): void {
     const newSearchPropertiesArray: Array<IButton> = this.searchProperties.map(
       (values: IButton) => {
@@ -115,29 +56,48 @@ export class LeftSideBarComponent implements OnInit {
             ...values,
             selected: true,
           };
+        } else if (values.description !== selectedMenuItem) {
+          return {
+            ...values,
+            selected: false,
+          };
         }
         return values;
       }
     );
     this.searchProperties = newSearchPropertiesArray;
   }
-  private changeThePlaylistMenuSelectedOptions(selectedPlaylist: string): void {
-    const newPlaylistArray: Array<IButton> = this.playlistProperties.map(
-      (values: IButton) => {
-        if (values.description === selectedPlaylist) {
-          return {
-            ...values,
-            selected: true,
-          };
-        }
-        return values;
-      }
-    );
-    this.playlistProperties = newPlaylistArray;
-  }
-
   async getPlaylists() {
-    this.userPlaylists = await this.spotifyService.searchUserPlaylist();
-    console.log(this.userPlaylists);
+    this.userPlaylists = this.convertPlaylistArrayToIButtonsInterface(
+      await this.spotifyService.searchUserPlaylist()
+    );
   }
+  public selectPlaylist(description: string) {
+    const newArray: IButton[] = this.userPlaylists.map((values: IButton) => {
+      if (description === values.description) {
+        return {
+          ...values,
+          selected: true,
+        };
+      } else if (description !== values.description) {
+        return {
+          ...values,
+          selected: false,
+        };
+      }
+      return values;
+    });
+    this.userPlaylists = newArray;
+  }
+  public convertPlaylistArrayToIButtonsInterface = (
+    playlist: IPlaylist[]
+  ): IButton[] => {
+    const convertedArray = playlist.map((values: IPlaylist) => {
+      return {
+        description: values.name,
+        selected: false,
+      };
+    });
+    return convertedArray;
+  };
 }

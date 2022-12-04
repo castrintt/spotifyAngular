@@ -1,7 +1,9 @@
 import IPlaylist from '../interfaces/IPlaylist';
 import IUser from '../interfaces/IUser';
 
-export const SpotifyTranslateUser = (user: any): IUser => {
+export const SpotifyTranslateUser = (
+  user: SpotifyApi.CurrentUsersProfileResponse
+): IUser => {
   return {
     id: user.id,
     name: user.display_name,

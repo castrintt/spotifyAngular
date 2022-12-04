@@ -6,7 +6,6 @@ import {
   SpotifyPlaylistTranslate,
   SpotifyTranslateUser,
 } from '../common/spotifyHelper';
-import { async } from 'rxjs';
 import IPlaylist from '../interfaces/IPlaylist';
 
 @Injectable({
@@ -15,7 +14,8 @@ import IPlaylist from '../interfaces/IPlaylist';
 export class SpotifyService {
   public spotify: Spotify.SpotifyWebApiJs;
   public user: IUser;
-  public userIdToFindPlaylist: string;
+  private userId: string;
+
   constructor() {
     this.spotify = new Spotify();
   }
@@ -37,7 +37,7 @@ export class SpotifyService {
   public obtainSpotifyUser = async () => {
     const userInfo = await this.spotify.getMe();
     this.user = SpotifyTranslateUser(userInfo);
-    this.userIdToFindPlaylist = userInfo.id;
+    this.userId = userInfo.id;
   };
 
   public obtainLoginUrl(): string {
@@ -48,6 +48,7 @@ export class SpotifyService {
     const responseType: string = `response_type=token&show_dialog=true`;
     return authEndPoint + clientId + redirectUrl + scopes + responseType;
   }
+
   public obtainTokenUrlCallBack(): string {
     if (!window.location.hash) {
       return '';
@@ -55,19 +56,20 @@ export class SpotifyService {
     const params: string[] = window.location.href.substring(1).split('&');
     return params[0].split('=')[1];
   }
+  
   public defineAccessToken(token: string) {
     this.spotify.setAccessToken(token);
     localStorage.setItem('Token', token);
   }
 
-  public searchUserPlaylist = async (offset = 0, limit = 50): Promise<any> => {
-    const userPlaylists = await this.spotify.getUserPlaylists(
-      this.userIdToFindPlaylist,
-      {
-        limit,
-        offset,
-      }
-    );
+  public searchUserPlaylist = async (
+    offset = 0,
+    limit = 50
+  ): Promise<IPlaylist[]> => {
+    const userPlaylists = await this.spotify.getUserPlaylists(this.userId, {
+      limit,
+      offset,
+    });
     return userPlaylists.items.map(SpotifyPlaylistTranslate);
   };
 }

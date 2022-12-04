@@ -4,7 +4,7 @@
   </div>
   <div class="menu-container flex options">
     <ng-template ngFor let-item [ngForOf]="searchProperties">
-      <app-button [searchProperties]="item" (click)="buttonClick($event)">
+      <app-button [searchProperties]="item" (click)="selectMenu($event)">
         <fa-icon [icon]="item.icon"></fa-icon>
       </app-button>
     </ng-template>
@@ -14,9 +14,9 @@
       PLAYLIST
     </span>
     <div class="playlist-scroll">
-      <ng-template ngFor let-item [ngForOf]="playlistProperties">
-        <app-button [searchProperties]="item" (click)="buttonClick($event)">
-          <fa-icon [icon]="item.icon"></fa-icon>
+      <ng-template ngFor let-item [ngForOf]="userPlaylists">
+        <app-button [searchProperties]="item" (click)="selectPlaylist($event)">
+          <fa-icon [icon]="musicICon"></fa-icon>
         </app-button>
       </ng-template>
     </div>
