@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import IButton from 'src/app/interfaces/IButton';
 
 @Component({
   selector: 'app-button',
@@ -8,18 +7,16 @@ import IButton from 'src/app/interfaces/IButton';
 })
 export class ButtonComponent implements OnInit {
   @Input()
-  public searchProperties: IButton = {
-    description: '',
-    icon: null,
-    selected: false,
-  };
+  public description: string = '';
+  @Input()
+  public selectedItem: boolean = false;
 
   @Output()
-  public click = new EventEmitter<string>();
+  public emitter = new EventEmitter<string>();
 
   ngOnInit(): void {}
 
   public onClick(description: string): void {
-    this.click.emit(description);
+    this.emitter.emit(description);
   }
 }
